@@ -27,6 +27,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/arm/storage"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/ghodss/yaml"
+	"time"
 )
 
 // CloudProviderName is the value used for the --cloud-provider flag
@@ -105,40 +106,52 @@ func NewCloud(configReader io.Reader) (cloudprovider.Interface, error) {
 		return nil, err
 	}
 
+	pollingDelay := time.Second * 5
+
 	az.SubnetsClient = network.NewSubnetsClient(az.SubscriptionID)
 	az.SubnetsClient.BaseURI = az.Environment.ResourceManagerEndpoint
 	az.SubnetsClient.Authorizer = servicePrincipalToken
+	az.SubnetsClient.PollingDelay = pollingDelay
+
 
 	az.RouteTablesClient = network.NewRouteTablesClient(az.SubscriptionID)
 	az.RouteTablesClient.BaseURI = az.Environment.ResourceManagerEndpoint
 	az.RouteTablesClient.Authorizer = servicePrincipalToken
+	az.RouteTablesClient.PollingDelay = pollingDelay
 
 	az.RoutesClient = network.NewRoutesClient(az.SubscriptionID)
 	az.RoutesClient.BaseURI = az.Environment.ResourceManagerEndpoint
 	az.RoutesClient.Authorizer = servicePrincipalToken
+	az.RoutesClient.PollingDelay = pollingDelay
 
 	az.InterfacesClient = network.NewInterfacesClient(az.SubscriptionID)
 	az.InterfacesClient.BaseURI = az.Environment.ResourceManagerEndpoint
 	az.InterfacesClient.Authorizer = servicePrincipalToken
+	az.InterfacesClient.PollingDelay = pollingDelay
 
 	az.LoadBalancerClient = network.NewLoadBalancersClient(az.SubscriptionID)
 	az.LoadBalancerClient.BaseURI = az.Environment.ResourceManagerEndpoint
 	az.LoadBalancerClient.Authorizer = servicePrincipalToken
+	az.LoadBalancerClient.PollingDelay = pollingDelay
 
 	az.VirtualMachinesClient = compute.NewVirtualMachinesClient(az.SubscriptionID)
 	az.VirtualMachinesClient.BaseURI = az.Environment.ResourceManagerEndpoint
 	az.VirtualMachinesClient.Authorizer = servicePrincipalToken
+	az.VirtualMachinesClient.PollingDelay = pollingDelay
 
 	az.PublicIPAddressesClient = network.NewPublicIPAddressesClient(az.SubscriptionID)
 	az.PublicIPAddressesClient.BaseURI = az.Environment.ResourceManagerEndpoint
 	az.PublicIPAddressesClient.Authorizer = servicePrincipalToken
+	az.PublicIPAddressesClient.PollingDelay = pollingDelay
 
 	az.SecurityGroupsClient = network.NewSecurityGroupsClient(az.SubscriptionID)
 	az.SecurityGroupsClient.BaseURI = az.Environment.ResourceManagerEndpoint
 	az.SecurityGroupsClient.Authorizer = servicePrincipalToken
+	az.SecurityGroupsClient.PollingDelay = pollingDelay
 
 	az.StorageAccountClient = storage.NewAccountsClientWithBaseURI(az.Environment.ResourceManagerEndpoint, az.SubscriptionID)
 	az.StorageAccountClient.Authorizer = servicePrincipalToken
+	az.StorageAccountClient.PollingDelay = pollingDelay
 	return &az, nil
 }
 
